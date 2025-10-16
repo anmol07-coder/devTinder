@@ -2,13 +2,21 @@ const express = require("express");
 
 const app = express();
 
+app.use("/namaste/api",(req,res)=>{
+    res.send("Namastee to API");
+});
+
 app.use("/namaste",(req,res)=>{
     res.send("Namaste Node");
 });
 
-app.use("/hello",(req,res)=>{
+app.use("/hello1",(req,res)=>{
     res.send("Hello Node");
 });
+
+app.use("/hello/api",(req,res)=>{
+    res.send("Helllooo to API");
+})
 
 app.use("/",(req,res)=>{
     res.send("Node");
