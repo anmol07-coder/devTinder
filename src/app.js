@@ -1,21 +1,39 @@
 // Creating our first server with the help of node.js
 const express = require("express");
+const connectDB = require("./config/database");
+const User = require("./models/user");
 
 const app = express();
 
-app.use("/test",(req,res)=>{
-    res.send("This is the test case of the server")
+
+// Creating a signup API because first a user must have to signup or we can say crate account on the app
+app.post("/signup",async (req,res)=>{
+    const userObj ={
+        firstName : "Anmol",
+        lastName : "Tyagi",
+        emailId : "tyagiji2005@gmail.com",
+        password : "anmol@tyagi"
+    }
+
+    // Creating new instance of our User model
+    const user = new User(userObj);
+
+    // This function will return us a promise
+    try{
+        await user.save();
+        res.send("User added successfully");
+    }catch(err){
+        res.status(400).send("Error saving the error");
+    }
+    
 })
 
-app.use("/hello",(req,res)=>{
-    res.send("Saying hello to the srever");
-})
-
-app.use("/",(req,res)=>{
-    res.send("Namaste node");
-})
-
-app.listen(7777,()=>{
+connectDB().then(()=>{
+    console.log("Database connection established...");
+    app.listen(7777,()=>{
     console.log("Server is successfullt started at port 7777...")
+});
+}).catch((err)=>{
+    console.log("Database cannot be connected...");
 });
 
