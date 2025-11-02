@@ -51,6 +51,43 @@ app.get("/feed",async (req,res)=>{
     }
 })
 
+app.delete("/user", async (req, res) => {
+  try {
+    const userId = req.body._id;
+
+    // 1️⃣ Case: No ID provided
+    if (!userId) {
+      return res.status(400).send("UserId required");
+    }
+
+    // 2️⃣ Case: Try deleting user by ID
+    const deletedUser = await User.findByIdAndDelete(userId);
+
+    // 3️⃣ Case: ID was valid, but user doesn’t exist in database
+    if (!deletedUser) {
+      return res.status(404).send("User not found");
+    }
+
+    // 4️⃣ Case: Success — user deleted
+    return res.send("User deleted successfully");
+  } catch (err) {
+    // 5️⃣ Case: Invalid ObjectId or other server/database errors
+    return res.status(400).send(err.message);
+  }
+});
+
+app.patch("/user",async (req,res)=>{
+  const userId = req.body._id;
+  const data = req.body;
+  try{
+    const user = await User.findByIdAndUpdate({_id:userId},data);
+    res.send("User updated successfully");
+  }
+  catch(err){
+    res.status(400).send(err.message);
+  }
+});
+
 
 connectDB().then(()=>{
     console.log("Database connection established...");
