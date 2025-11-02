@@ -5,22 +5,59 @@ const mongoose = require('mongoose');
 const userSchema = mongoose.Schema({
     firstName : {
         type:String,
+        required:true,
+        minLength:2,
+        maxLength:50,
+        trim:true,
     },
+
     lastName : { 
         type:String,
+        minLength:2,
+        maxLength:50,
+        trim:true,
     },
+
     emailId : {
         type:String,
+        required:true,
+        unique:true,
+        lowercase:true,
+        trim:true,
     },
+
     password : {
         type:String,
+        required:true,
+        minLength:8,
     },
+
     age : {
         type:Number,
+        min:18,
     },
+
     gender : {
         type:String,
+        enum:['male','female','other'],
     },
+
+    photoUrl : {
+        type:String,
+    },
+
+    about : {
+        type:String,
+        default:"This is a default description about the user",
+        maxLength:200,
+    },
+
+    skills : {
+        type:[String],
+    }
+},
+{
+    timestamps:true
 });
 
 // Creating a mongoDB model and exporting it
